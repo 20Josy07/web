@@ -252,6 +252,16 @@
 
     <script>
         function startHome() {
+            // Solicitar pantalla completa para ocultar barra de direcciones
+            let elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) {
+                elem.msRequestFullscreen();
+            }
+
             document.getElementById('start-overlay').style.opacity = '0';
             setTimeout(() => {
                 document.getElementById('start-overlay').style.display = 'none';
