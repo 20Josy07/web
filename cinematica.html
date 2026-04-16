@@ -177,6 +177,16 @@
             const overlay = document.getElementById('overlay-start');
             const video = document.getElementById('myVideo');
             
+            // Solicitar pantalla completa
+            let elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) {
+                elem.msRequestFullscreen();
+            }
+
             overlay.style.opacity = '0';
             setTimeout(() => {
                 overlay.style.display = 'none';
