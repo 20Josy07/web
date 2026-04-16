@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>...</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        :root {
+            --bg-top: #fff5f8;
+            --bg-bottom: #fdfdfd;
+            --glass-bg: rgba(255, 255, 255, 0.6);
+            --glass-border: rgba(255, 51, 102, 0.15);
+            --text-main: #3d1a25;
+            --accent: #ff3366;
+            --accent-glow: rgba(255, 51, 102, 0.1);
+            --font-serif: 'Playfair Display', serif;
+            --font-sans: 'Outfit', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            cursor: none;
+        }
+
+        body {
+            background: var(--bg-bottom);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            overflow-x: hidden;
+            overflow-y: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Ocultar cursor en móviles */
+        @media (pointer: coarse) {
+            * {
+                cursor: auto !important;
+            }
+
+            #cursor-glow,
+            #cursor-dot {
+                display: none !important;
+            }
+        }
+
+        /* --- Fondo de Lujo (Gradient Mesh) --- */
+        #bg-mesh {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background:
+                radial-gradient(at 0% 0%, rgba(255, 51, 102, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(255, 182, 193, 0.2) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(255, 51, 102, 0.05) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, rgba(255, 192, 203, 0.15) 0px, transparent 50%);
+            filter: blur(80px);
+            animation: meshMove 20s infinite alternate;
+        }
+
+        @keyframes meshMove {
+            0% {
+                transform: scale(1);
+            }
+
+            100% {
+                transform: scale(1.2) rotate(5deg);
+            }
+        }
+
+        /* --- Cursor Custom --- */
+        #cursor-glow {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 51, 102, 0.08) 0%, transparent 70%);
+            position: fixed;
+            pointer-events: none;
+            z-index: -1;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+        }
+
+        #cursor-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 10000;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 15px var(--accent);
+        }
+
+        /* --- Splash Screen (Misterio) --- */
+        #splash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .splash-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: all 1s ease;
+        }
+
+        #splash p {
+            font-family: var(--font-serif);
+            font-size: 1.4rem;
+            font-style: italic;
+            letter-spacing: 1px;
+            color: rgba(0, 0, 0, 0.5);
+            margin-bottom: 3rem;
+            max-width: 450px;
+            line-height: 1.8;
+            animation: fadeInOut 5s infinite;
+        }
+
+        .btn-splash {
+            background: transparent;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            color: #000;
+            padding: 16px 50px;
+            font-size: 0.7rem;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            cursor: none;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 2px;
+        }
+
+        .btn-splash:hover {
+            background: #000;
+            color: #fff;
+            letter-spacing: 8px;
+        }
+
+        /* --- Control de Música --- */
+        #music-control {
+            position: fixed;
+            bottom: 40px;
+            left: 40px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 51, 102, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: none;
+            z-index: 100;
+            opacity: 0;
+            transition: all 0.8s;
+            color: var(--accent);
+        }
+
+        #music-control.visible {
+            opacity: 1;
+        }
+
+        /* --- Contenido Principal --- */
+        #main-content {
+            opacity: 0;
+            transition: opacity 3s ease;
+            width: 100%;
+            padding: 60px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .glass-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.4) 100%);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 60px;
+            padding: 5rem;
+            max-width: 1000px;
+            width: 100%;
+            box-shadow: 0 50px 100px rgba(255, 51, 102, 0.1);
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 5rem;
+            align-items: center;
+            position: relative;
+        }
+
+        .subtitle {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            color: var(--accent);
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+
+        h1 {
+            font-family: var(--font-serif);
+            font-size: 5rem;
+            line-height: 1.1;
+            margin-bottom: 3rem;
+            color: #2d1b24;
+            font-weight: 700;
+        }
+
+        .letter {
+            font-size: 1.2rem;
+            line-height: 2;
+            color: #4a3a41;
+            margin-bottom: 4rem;
+            font-weight: 400;
+            font-family: var(--font-sans);
+        }
+
+        .signature {
+            font-family: var(--font-serif);
+            font-size: 2rem;
+            color: var(--accent);
+            margin-bottom: 4rem;
+        }
+
+        .metrics {
+            display: flex;
+            gap: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 3rem;
+        }
+
+        .metric-value {
+            font-size: 2.8rem;
+            font-family: var(--font-sans);
+            color: #2d1b24;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .metric-label {
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            color: var(--accent);
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        .polaroid-frame {
+            background: #fff;
+            padding: 20px 20px 60px 20px;
+            box-shadow: 0 20px 40px rgba(255, 51, 102, 0.1);
+            transform: rotate(2deg);
+            transition: transform 0.6s cubic-bezier(0.2, 1, 0.3, 1);
+        }
+
+        .polaroid-frame:hover {
+            transform: rotate(0deg) translateY(-10px);
+        }
+
+        .polaroid-frame img {
+            width: 100%;
+            height: auto;
+            filter: grayscale(0.2) contrast(1.1);
+        }
+
+        @media (max-width: 900px) {
+            .glass-card {
+                grid-template-columns: 1fr;
+                padding: 2.5rem 1.5rem;
+                gap: 3rem;
+                margin: 20px;
+                border-radius: 30px;
+            }
+
+            h1 {
+                font-size: 2.8rem;
+                margin-bottom: 2rem;
+                text-align: center;
+            }
+
+            .subtitle {
+                text-align: center;
+                letter-spacing: 4px;
+            }
+
+            .letter {
+                font-size: 1.05rem;
+                line-height: 1.8;
+                text-align: left;
+                margin-bottom: 3rem;
+            }
+
+            .signature {
+                font-size: 1.6rem;
+                text-align: center;
+                margin-bottom: 3rem;
+            }
+
+            .metrics {
+                flex-direction: row;
+                justify-content: space-around;
+                gap: 1rem;
+                padding-top: 2rem;
+            }
+
+            .metric-value {
+                font-size: 1.8rem;
+            }
+
+            .metric-label {
+                font-size: 0.5rem;
+                letter-spacing: 1px;
+            }
+
+            .polaroid-container {
+                order: -1;
+                display: flex;
+                justify-content: center;
+            }
+
+            .polaroid-frame {
+                width: 80%;
+                max-width: 250px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            .metrics {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                gap: 1rem;
+                width: 100%;
+            }
+
+            .metric-item {
+                flex: 1;
+                text-align: center;
+            }
+        }
+
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+        }
+    </style>
+
+<body>
+
+    <div id="cursor-glow"></div>
+    <div id="cursor-dot"></div>
+    <div id="bg-mesh"></div>
+
+    <div id="splash">
+        <div id="step-1" class="splash-step">
+            <p>Busca un lugar seguro donde ver esto...</p>
+            <button class="btn-splash" onclick="nextStep()">Continuar</button>
+        </div>
+        <div id="step-2" class="splash-step" style="display: none; opacity: 0;">
+            <p>Se recomienda el uso de audífonos ya que se reproducirán sonidos.</p>
+            <button class="btn-splash" onclick="iniciar()">Entrar</button>
+        </div>
+    </div>
+
+    <button id="music-control" onclick="toggleMusic()">
+        <span id="music-icon" class="material-icons">pause</span>
+    </button>
+
+    <audio id="audio" loop>
+        <source src="mi-persona-favorita-lyric-video.mp3" type="audio/mpeg">
+    </audio>
+
+    <canvas id="loveCanvas"></canvas>
+
+    <div id="main-content">
+        <div class="glass-card">
+            <div class="card-content">
+                <div class="subtitle">Colombia — México</div>
+                <h1>Mi Princesita</h1>
+
+                <div id="letter-text" class="letter"></div>
+
+                <div class="signature" style="opacity: 0; transition: opacity 2s ease;" id="signature-reveal">
+                    Feliz primer mes, Mi vida.
+                </div>
+
+                <div class="metrics">
+                    <div class="metric-item">
+                        <div class="metric-value">31</div>
+                        <div class="metric-label">Días</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value">∞</div>
+                        <div class="metric-label">Voz</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value">1</div>
+                        <div class="metric-label">Destino</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="polaroid-container">
+                <div class="polaroid-frame">
+                    <img src="Photo.jpg" alt="Nosotros">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Cursor interactivo ---
+        const glow = document.getElementById('cursor-glow');
+        const dot = document.getElementById('cursor-dot');
+        window.addEventListener('mousemove', (e) => {
+            glow.style.left = e.clientX + 'px';
+            glow.style.top = e.clientY + 'px';
+            dot.style.left = e.clientX + 'px';
+            dot.style.top = e.clientY + 'px';
+        });
+
+        // --- Lógica de Inicio ---
+        function nextStep() {
+            const step1 = document.getElementById('step-1');
+            const step2 = document.getElementById('step-2');
+            step1.style.opacity = '0';
+            setTimeout(() => {
+                step1.style.display = 'none';
+                step2.style.display = 'flex';
+                setTimeout(() => { step2.style.opacity = '1'; }, 50);
+            }, 800);
+        }
+
+        function iniciar() {
+            // Solicitar pantalla completa al entrar (en caso de que se haya salido)
+            let elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) {
+                elem.msRequestFullscreen();
+            }
+
+            const splash = document.getElementById('splash');
+            const main = document.getElementById('main-content');
+            const audio = document.getElementById('audio');
+            const musicBtn = document.getElementById('music-control');
+            splash.style.opacity = '0';
+            splash.style.pointerEvents = 'none';
+            setTimeout(() => {
+                splash.style.display = 'none';
+                main.style.opacity = '1';
+                document.title = "Un momento para nosotros ❤️";
+                musicBtn.classList.add('visible');
+                audio.play();
+                initCanvas();
+                typeWriter();
+            }, 1500);
+        }
+
+        const textoCarta = `Hay personas que necesitan verse todos los días para sentir algo. Nosotros demostramos que se puede construir un universo entero solo con la voz y las palabras.\n\nEn estos 30 días, cada mensaje tuyo ha sido mi notificación favorita, y cada llamada, el mejor momento de mi día. No tenemos fotos juntos todavía, pero tenemos algo más fuerte: la certeza de que la distancia es temporal, pero esto que estamos creando es real.`;
+
+        function typeWriter() {
+            const container = document.getElementById('letter-text');
+            const signature = document.getElementById('signature-reveal');
+            let i = 0;
+            function printChar() {
+                if (i < textoCarta.length) {
+                    container.innerHTML += textoCarta.charAt(i) === '\n' ? '<br>' : textoCarta.charAt(i);
+                    i++;
+                    setTimeout(printChar, 35);
+                } else {
+                    signature.style.opacity = '1';
+                }
+            }
+            printChar();
+        }
+
+        function toggleMusic() {
+            const audio = document.getElementById('audio');
+            const icon = document.getElementById('music-icon');
+            if (audio.paused) { audio.play(); icon.innerText = "pause"; }
+            else { audio.pause(); icon.innerText = "play_arrow"; }
+        }
+
+        // --- Pétalos y Corazones (Canvas) ---
+        const canvas = document.getElementById('loveCanvas');
+        const ctx = canvas.getContext('2d');
+        let heartsArray = [];
+        let petalsArray = [];
+
+        function initCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            heartsArray = [];
+            petalsArray = [];
+            for (let i = 0; i < 30; i++) heartsArray.push(new FloatingHeart());
+            for (let i = 0; i < 50; i++) petalsArray.push(new Petal());
+            animate();
+        }
+
+        class Petal {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height - canvas.height;
+                this.size = Math.random() * 5 + 2;
+                this.speedX = Math.random() * 2 - 1;
+                this.speedY = Math.random() * 1 + 1;
+                this.rotation = Math.random() * 360;
+                this.rotationSpeed = Math.random() * 2;
+                this.opacity = Math.random() * 0.5 + 0.2;
+            }
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation * Math.PI / 180);
+                ctx.beginPath();
+                ctx.ellipse(0, 0, this.size, this.size * 1.5, 0, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 51, 102, ${this.opacity})`;
+                ctx.fill();
+                ctx.restore();
+            }
+            update() {
+                this.y += this.speedY;
+                this.x += Math.sin(this.y / 50) + this.speedX;
+                this.rotation += this.rotationSpeed;
+                if (this.y > canvas.height) {
+                    this.y = -20;
+                    this.x = Math.random() * canvas.width;
+                }
+                this.draw();
+            }
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation * Math.PI / 180);
+                ctx.beginPath();
+                ctx.ellipse(0, 0, this.size, this.size * 1.5, 0, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 51, 102, ${this.opacity})`;
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        class FloatingHeart {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height + canvas.height;
+                this.size = Math.random() * 15 + 5;
+                this.speed = Math.random() * 0.5 + 0.2;
+                this.opacity = Math.random() * 0.3 + 0.05;
+            }
+            update() {
+                this.y -= this.speed;
+                if (this.y < -20) this.y = canvas.height + 20;
+                this.draw();
+            }
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.opacity;
+                ctx.translate(this.x, this.y);
+                const s = this.size / 20;
+                ctx.scale(s, s);
+                ctx.fillStyle = "#ff3366";
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.bezierCurveTo(-10, -10, -20, 10, 0, 20);
+                ctx.bezierCurveTo(20, 10, 10, -10, 0, 0);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            petalsArray.forEach(p => p.update());
+            heartsArray.forEach(h => h.update());
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+
+</html>

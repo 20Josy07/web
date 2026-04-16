@@ -202,10 +202,6 @@
 </head>
 <body>
 
-    <div id="start-overlay">
-        <button class="btn-start" onclick="startHome()">Toca para entrar al Home</button>
-    </div>
-
     <div id="phone-bg"></div>
 
     <div id="notif-banner" onclick="openGift()">
@@ -251,8 +247,10 @@
     </audio>
 
     <script>
+        window.onload = startHome;
+
         function startHome() {
-            // Solicitar pantalla completa para ocultar barra de direcciones
+            // Solicitar pantalla completa para asegurar inmersión
             let elem = document.documentElement;
             if (elem.requestFullscreen) {
                 elem.requestFullscreen();
@@ -262,20 +260,16 @@
                 elem.msRequestFullscreen();
             }
 
-            document.getElementById('start-overlay').style.opacity = '0';
+            updateTime();
+            setInterval(updateTime, 1000);
+            
+            // Programar la llegada de la notificación
             setTimeout(() => {
-                document.getElementById('start-overlay').style.display = 'none';
-                updateTime();
-                setInterval(updateTime, 1000);
-                
-                // Programar la llegada de la notificación
-                setTimeout(() => {
-                    const banner = document.getElementById('notif-banner');
-                    const sound = document.getElementById('notif-sound');
-                    banner.classList.add('show');
-                    sound.play();
-                }, 3000); // Llega a los 3 segundos de estar en el home
-            }, 800);
+                const banner = document.getElementById('notif-banner');
+                const sound = document.getElementById('notif-sound');
+                banner.classList.add('show');
+                sound.play();
+            }, 3000); 
         }
 
         function updateTime() {
@@ -286,7 +280,7 @@
         }
 
         function openGift() {
-            window.location.href = "index.html";
+            window.location.href = "regalo.html";
         }
     </script>
 </body>
