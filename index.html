@@ -23,7 +23,10 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
-        @media (pointer: coarse) { * { cursor: auto !important; } }
+        @media (pointer: coarse) { 
+            * { cursor: auto !important; } 
+            #cursor-glow, #cursor-dot { display: none !important; }
+        }
 
         body, html {
             width: 100vw;
@@ -75,10 +78,10 @@
             background: #000;
         }
         video#myVideo {
-            min-width: 100%;
-            min-height: 100%;
-            object-fit: cover;
-            filter: brightness(0.8) contrast(1.1);
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* Cambiado a contain para evitar zoom bug */
+            background: #000;
         }
         .cinema-bar {
             position: absolute; left: 0; width: 100%; height: 12vh;
@@ -120,17 +123,21 @@
             padding: 0 25px; font-size: 0.85rem; color: #fff; font-weight: 600;
         }
         .app-grid {
-            margin-top: 100px;
-            display: grid; grid-template-columns: repeat(4, 1fr);
-            gap: 25px 15px; padding: 0 20px;
+            flex: 1;
+            display: grid; 
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px 10px; 
+            padding: 20px;
+            align-content: start;
         }
-        .app-icon { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+        .app-icon { display: flex; flex-direction: column; align-items: center; gap: 5px; }
         .icon-box {
-            width: 60px; height: 60px; border-radius: 14px;
+            width: 55px; height: 55px; border-radius: 14px;
             display: flex; justify-content: center; align-items: center;
-            color: #fff; font-size: 1.8rem;
+            color: #fff; font-size: 1.5rem;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
         }
-        .app-name { color: #fff; font-size: 0.65rem; }
+        .app-name { color: #fff; font-size: 0.6rem; font-weight: 500; margin-top: 2px; }
         .ig { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
         .wa { background: #25D366; }
         .tk { background: #000; border: 1px solid rgba(255,255,255,0.2); }
@@ -217,7 +224,7 @@
     </div>
 
     <!-- PANTALLA 3: TELÉFONO -->
-    <div id="screen-phone" class="screen" onclick="requestFS()">
+    <div id="screen-phone" class="screen" onclick="requestFS()" style="display: flex; flex-direction: column; padding: 40px 10px 100px 10px;">
         <div id="phone-bg"></div>
         <div class="status-bar">
             <div id="status-time">00:00</div>
