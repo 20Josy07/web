@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iPhone — Lock Screen</title>
+    <title>Smartphone — Home</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
@@ -23,147 +23,153 @@
             top: 0; left: 0; width: 100%; height: 100%;
             background: url('phone_wallpaper_1776381565137.png') no-repeat center center;
             background-size: cover;
-            transition: transform 1s ease, filter 1s ease;
+            filter: brightness(0.8);
             z-index: 1;
         }
 
-        .unlocked #phone-bg {
-            transform: scale(1.1);
-            filter: blur(20px) brightness(0.5);
-        }
-
-        /* --- Lock Screen Content --- */
-        #lock-screen {
+        /* --- Home Screen --- */
+        #home-screen {
             position: relative;
             z-index: 10;
             height: 100%;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            padding-top: 80px;
+            padding: 50px 20px 20px 20px;
+        }
+
+        /* --- Status Bar --- */
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 10px;
+            font-size: 0.8rem;
             color: #fff;
-            transition: opacity 0.8s ease;
+            font-weight: 600;
+            margin-bottom: 30px;
         }
 
-        #time {
-            font-size: 5rem;
-            font-weight: 200;
-            margin-bottom: 5px;
-            letter-spacing: -2px;
+        /* --- App Grid --- */
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px 15px;
+            text-align: center;
         }
 
-        #date {
-            font-size: 1.2rem;
-            font-weight: 400;
-            opacity: 0.9;
+        .app-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
         }
 
-        /* --- Notifications Container --- */
-        #notifications-container {
+        .icon-box {
+            width: 60px;
+            height: 60px;
+            border-radius: 14px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-size: 1.8rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .app-name {
+            color: #fff;
+            font-size: 0.65rem;
+            font-weight: 500;
+        }
+
+        /* Colores de Apps */
+        .ig { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+        .tk { background: #000; border: 1px solid rgba(255,255,255,0.2); }
+        .sp { background: #1DB954; }
+        .wa { background: #25D366; }
+        .ph { background: #fff; color: #ff3366; }
+        .st { background: #8e8e93; }
+        .ca { background: #333; }
+        .ma { background: #4285F4; }
+
+        /* --- Dock --- */
+        .dock {
             position: absolute;
-            top: 250px;
-            width: 100%;
-            padding: 0 15px;
+            bottom: 25px;
+            left: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 15px;
             display: flex;
-            flex-direction: column;
-            gap: 10px;
-            z-index: 20;
+            justify-content: space-around;
+            align-items: center;
         }
 
-        .notification {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border-radius: 20px;
+        .dock .icon-box { width: 55px; height: 55px; }
+
+        /* --- Notificación Banner --- */
+        #notif-banner {
+            position: fixed;
+            top: -100px;
+            left: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 24px;
             padding: 15px;
-            width: 100%;
-            max-width: 400px;
-            margin: 0 auto;
             display: flex;
-            flex-direction: column;
-            gap: 5px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transform: translateY(20px);
-            opacity: 0;
-            transition: all 0.6s cubic-bezier(0.2, 1, 0.3, 1);
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            z-index: 1000;
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             cursor: pointer;
         }
 
-        .notification.visible {
-            transform: translateY(0);
-            opacity: 1;
+        #notif-banner.show {
+            transform: translateY(120px);
         }
 
-        .notif-header {
+        .notif-app-icon {
+            width: 40px;
+            height: 40px;
+            background: #25D366;
+            border-radius: 10px;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            font-size: 0.7rem;
-            opacity: 0.6;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            color: #fff;
         }
 
-        .notif-app {
-            display: flex;
-            align-items: center;
-            gap: 5px;
+        .notif-content {
+            flex: 1;
         }
 
-        .notif-app i { font-size: 1rem; color: #25D366; }
-
-        .notif-title {
-            font-weight: 600;
-            font-size: 0.95rem;
-        }
-
-        .notif-body {
+        .notif-user {
+            font-weight: 700;
             font-size: 0.9rem;
-            opacity: 0.8;
-            line-height: 1.3;
+            color: #000;
         }
 
-        /* --- Footer --- */
-        #footer {
-            position: absolute;
-            bottom: 50px;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
+        .notif-msg {
+            font-size: 0.85rem;
+            color: #444;
         }
 
-        .slide-text {
-            font-size: 0.8rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            opacity: 0.5;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.3; transform: translateX(0); }
-            50% { opacity: 0.7; transform: translateX(5px); }
-        }
-
-        .lock-icon {
-            font-size: 1.5rem;
-            opacity: 0.8;
-        }
-
-        /* --- Splash Overlay for sounds --- */
+        /* --- Overlay Inicial --- */
         #start-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: #000;
-            z-index: 1000;
+            z-index: 10000;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        .btn-unlock {
+        .btn-start {
             background: none;
             border: 1px solid rgba(255,255,255,0.3);
             color: #fff;
@@ -172,30 +178,51 @@
             font-size: 0.8rem;
             letter-spacing: 2px;
             text-transform: uppercase;
-            cursor: pointer;
         }
     </style>
 </head>
 <body>
 
     <div id="start-overlay">
-        <button class="btn-unlock" onclick="startPhone()">Presiona para continuar</button>
+        <button class="btn-start" onclick="startHome()">Toca para entrar al Home</button>
     </div>
 
     <div id="phone-bg"></div>
 
-    <div id="lock-screen">
-        <div class="lock-icon"><i class="material-icons">lock</i></div>
-        <div id="time">00:00</div>
-        <div id="date">Jueves, 16 de Abril</div>
+    <div id="notif-banner" onclick="openGift()">
+        <div class="notif-app-icon"><i class="material-icons">message</i></div>
+        <div class="notif-content">
+            <div class="notif-user">Mi amorcito 💖</div>
+            <div class="notif-msg">¡Sorpresa! He preparado algo para ti... Toca para ver ✨</div>
+        </div>
+    </div>
 
-        <div id="notifications-container">
-            <!-- Notificaciones dinámicas -->
+    <div id="home-screen">
+        <div class="status-bar">
+            <div id="status-time">00:00</div>
+            <div style="display: flex; gap: 5px; align-items: center;">
+                <i class="material-icons" style="font-size: 1rem;">signal_cellular_alt</i>
+                <i class="material-icons" style="font-size: 1rem;">wifi</i>
+                <i class="material-icons" style="font-size: 1rem;">battery_full</i>
+            </div>
         </div>
 
-        <div id="footer" onclick="unlock()">
-            <div class="slide-text">Toca para abrir</div>
-            <div style="width: 134px; height: 5px; background: #fff; border-radius: 10px; opacity: 0.5;"></div>
+        <div class="app-grid">
+            <div class="app-icon"><div class="icon-box ig"><i class="material-icons">photo_camera</i></div><span class="app-name">Instagram</span></div>
+            <div class="app-icon"><div class="icon-box wa"><i class="material-icons">message</i></div><span class="app-name">WhatsApp</span></div>
+            <div class="app-icon"><div class="icon-box tk"><i class="material-icons">music_video</i></div><span class="app-name">TikTok</span></div>
+            <div class="app-icon"><div class="icon-box ph"><i class="material-icons">image</i></div><span class="app-name">Fotos</span></div>
+            <div class="app-icon"><div class="icon-box sp"><i class="material-icons">play_circle</i></div><span class="app-name">Spotify</span></div>
+            <div class="app-icon"><div class="icon-box st"><i class="material-icons">settings</i></div><span class="app-name">Ajustes</span></div>
+            <div class="app-icon"><div class="icon-box ma"><div style="width:20px; height:20px; background:#fff; border-radius:50%;"></div></div><span class="app-name">Maps</span></div>
+            <div class="app-icon"><div class="icon-box ca"><i class="material-icons">camera_alt</i></div><span class="app-name">Cámara</span></div>
+        </div>
+
+        <div class="dock">
+            <div class="icon-box" style="background: #4cd964;"><i class="material-icons">phone</i></div>
+            <div class="icon-box" style="background: #5ac8fa;"><i class="material-icons">language</i></div>
+            <div class="icon-box" style="background: #ff2d55;"><i class="material-icons">music_note</i></div>
+            <div class="icon-box" style="background: #25D366;"><i class="material-icons">chat</i></div>
         </div>
     </div>
 
@@ -204,13 +231,20 @@
     </audio>
 
     <script>
-        function startPhone() {
+        function startHome() {
             document.getElementById('start-overlay').style.opacity = '0';
             setTimeout(() => {
                 document.getElementById('start-overlay').style.display = 'none';
                 updateTime();
                 setInterval(updateTime, 1000);
-                sequenceNotifications();
+                
+                // Programar la llegada de la notificación
+                setTimeout(() => {
+                    const banner = document.getElementById('notif-banner');
+                    const sound = document.getElementById('notif-sound');
+                    banner.classList.add('show');
+                    sound.play();
+                }, 3000); // Llega a los 3 segundos de estar en el home
             }, 800);
         }
 
@@ -218,51 +252,11 @@
             const now = new Date();
             const hours = String(now.getHours()).padStart(2, '0');
             const minutes = String(now.getMinutes()).padStart(2, '0');
-            document.getElementById('time').innerText = `${hours}:${minutes}`;
-            
-            const options = { weekday: 'long', day: 'numeric', month: 'long' };
-            document.getElementById('date').innerText = now.toLocaleDateString('es-ES', options);
+            document.getElementById('status-time').innerText = `${hours}:${minutes}`;
         }
 
-        const notifications = [
-            { app: 'WhatsApp', title: 'Él ❤️', body: '¿Estás ahí? Acabo de enviarte algo especial...' },
-            { app: 'WhatsApp', title: 'Él ❤️', body: 'No puedo dejar de pensar en lo que ha pasado estos 30 días.' },
-            { app: 'WhatsApp', title: 'Él ❤️', body: 'Toca aquí para verlo todo ✨' }
-        ];
-
-        function sequenceNotifications() {
-            const container = document.getElementById('notifications-container');
-            const sound = document.getElementById('notif-sound');
-
-            notifications.forEach((notif, i) => {
-                setTimeout(() => {
-                    const div = document.createElement('div');
-                    div.className = 'notification';
-                    div.onclick = unlock;
-                    div.innerHTML = `
-                        <div class="notif-header">
-                            <div class="notif-app"><i class="material-icons">message</i><span>${notif.app}</span></div>
-                            <span>ahora</span>
-                        </div>
-                        <div class="notif-title">${notif.title}</div>
-                        <div class="notif-body">${notif.body}</div>
-                    `;
-                    container.appendChild(div);
-                    setTimeout(() => { 
-                        div.classList.add('visible');
-                        sound.currentTime = 0;
-                        sound.play();
-                    }, 50);
-                }, (i + 1) * 2000);
-            });
-        }
-
-        function unlock() {
-            document.body.classList.add('unlocked');
-            document.getElementById('lock-screen').style.opacity = '0';
-            setTimeout(() => {
-                window.location.href = "index.html";
-            }, 1000);
+        function openGift() {
+            window.location.href = "index.html";
         }
     </script>
 </body>
