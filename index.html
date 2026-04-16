@@ -3,111 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nuestra Historia — Cinematic</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&family=Outfit:wght@300;400&display=swap" rel="stylesheet">
+    <title>Un momento para nosotros ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
         :root {
+            --bg-top: #fff5f8;
+            --bg-bottom: #fdfdfd;
+            --glass-bg: rgba(255, 255, 255, 0.6);
+            --glass-border: rgba(255, 51, 102, 0.15);
+            --text-main: #3d1a25;
             --accent: #ff3366;
+            --accent-glow: rgba(255, 51, 102, 0.1);
             --font-serif: 'Playfair Display', serif;
             --font-sans: 'Outfit', sans-serif;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+        @media (pointer: coarse) { * { cursor: auto !important; } }
 
         body, html {
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
             overflow: hidden;
             background: #000;
             font-family: var(--font-sans);
         }
 
-        /* --- Contenedor de Video --- */
-        #video-container {
+        /* --- Pantallas --- */
+        .screen {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: none;
+            overflow: hidden;
+        }
+
+        /* --- 1. PANTALLA: OVERLAY INICIAL --- */
+        #screen-intro {
             display: flex;
+            background: #000;
+            z-index: 1000;
             justify-content: center;
             align-items: center;
-        }
-
-        video {
-            min-width: 100%;
-            min-height: 100%;
-            width: auto;
-            height: auto;
-            object-fit: cover;
-            filter: brightness(0.8) contrast(1.1);
-        }
-
-        /* --- Capas de Cine --- */
-        .cinema-bar {
-            position: fixed;
-            left: 0;
-            width: 100%;
-            height: 12vh;
-            background: #000;
-            z-index: 10;
-        }
-        .top-bar { top: 0; }
-        .bottom-bar { bottom: 0; }
-
-        .vignette {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            box-shadow: inset 0 0 200px rgba(0,0,0,0.7);
-            z-index: 5;
-            pointer-events: none;
-        }
-
-        /* --- Subtítulos y Texto --- */
-        #subtitles {
-            position: fixed;
-            bottom: 15vh;
-            left: 50%;
-            transform: translateX(-50%);
+            flex-direction: column;
             text-align: center;
-            z-index: 20;
-            width: 80%;
-            transition: opacity 1s ease;
         }
 
-        .subtitle-text {
-            font-family: var(--font-serif);
-            font-size: 1.8rem;
-            color: #fff;
-            font-style: italic;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
-            opacity: 0;
-            animation: fadeInOut 5s forwards;
-        }
-
-        @keyframes fadeInOut {
-            0% { opacity: 0; transform: translateY(10px); }
-            20% { opacity: 1; transform: translateY(0); }
-            80% { opacity: 1; transform: translateY(0); }
-            100% { opacity: 0; transform: translateY(-10px); }
-        }
-
-        /* --- Controles --- */
-        #overlay-start {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: #000;
-            z-index: 100;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 1s ease;
-        }
-
-        .btn-play {
+        .btn-start {
             background: transparent;
             border: 1px solid rgba(255,255,255,0.3);
             color: #fff;
@@ -118,100 +62,297 @@
             cursor: pointer;
             transition: all 0.4s;
         }
+        .btn-start:hover { background: #fff; color: #000; }
 
-        .btn-play:hover {
-            background: #fff;
-            color: #000;
+        /* --- 2. PANTALLA: CINEMÁTICA --- */
+        #screen-cinematic {
+            background: #000;
+            z-index: 500;
+        }
+        video#myVideo {
+            min-width: 100%;
+            min-height: 100%;
+            object-fit: cover;
+            filter: brightness(0.8) contrast(1.1);
+        }
+        .cinema-bar {
+            position: absolute;
+            left: 0; width: 100%; height: 12vh;
+            background: #000; z-index: 10;
+        }
+        .top-bar { top: 0; }
+        .bottom-bar { bottom: 0; }
+        #subtitles {
+            position: absolute;
+            bottom: 15vh; left: 50%;
+            transform: translateX(-50%);
+            text-align: center; z-index: 20; width: 80%;
+        }
+        .subtitle-text {
+            font-family: var(--font-serif);
+            font-size: 1.8rem; color: #fff; font-style: italic;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+            opacity: 0; animation: fadeInOut 5s forwards;
+        }
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateY(10px); }
+            20% { opacity: 1; transform: translateY(0); }
+            80% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-10px); }
         }
 
-        .skip-btn {
-            position: fixed;
-            top: 40px;
-            right: 40px;
-            color: rgba(255,255,255,0.4);
-            text-decoration: none;
-            font-size: 0.7rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            z-index: 30;
-            transition: color 0.3s;
+        /* --- 3. PANTALLA: TELÉFONO --- */
+        #screen-phone {
+            z-index: 400;
         }
+        #phone-bg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url('wallpaper.jpg') no-repeat center center;
+            background-size: cover;
+            filter: brightness(0.8);
+        }
+        .status-bar {
+            position: absolute; top: 15px; width: 100%;
+            display: flex; justify-content: space-between;
+            padding: 0 25px; font-size: 0.85rem; color: #fff; font-weight: 600;
+        }
+        .app-grid {
+            margin-top: 100px;
+            display: grid; grid-template-columns: repeat(4, 1fr);
+            gap: 25px 15px; padding: 0 20px;
+        }
+        .app-icon { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+        .icon-box {
+            width: 60px; height: 60px; border-radius: 14px;
+            display: flex; justify-content: center; align-items: center;
+            color: #fff; font-size: 1.8rem;
+        }
+        .app-name { color: #fff; font-size: 0.65rem; }
+        .ig { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+        .wa { background: #25D366; }
+        .tk { background: #000; border: 1px solid rgba(255,255,255,0.2); }
+        .ph { background: #fff; color: #ff3366; }
+        .dock {
+            position: absolute; bottom: 30px; left: 20px; right: 20px;
+            background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(20px);
+            border-radius: 30px; padding: 15px; display: flex; justify-content: space-around;
+        }
+        #notif-banner {
+            position: absolute; top: -100px; left: 15px; right: 15px;
+            background: rgba(255, 255, 255, 0.95); border-radius: 24px;
+            padding: 12px; display: flex; align-items: center; gap: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3); z-index: 1000;
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+        }
+        #notif-banner.show { transform: translateY(120px); }
+        .notif-profile { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; }
+        .notif-user { font-weight: 700; font-size: 0.9rem; color: #000; }
+        .notif-msg { font-size: 0.85rem; color: #444; }
 
-        .skip-btn:hover { color: #fff; }
+        /* --- 4. PANTALLA: REGALO --- */
+        #screen-gift {
+            z-index: 300;
+            background: var(--bg-bottom);
+            overflow-y: auto !important;
+        }
+        #bg-mesh {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -2;
+            background: radial-gradient(at 0% 0%, rgba(255, 51, 102, 0.1) 0px, transparent 50%),
+                        radial-gradient(at 100% 0%, rgba(255, 182, 193, 0.2) 0px, transparent 50%),
+                        radial-gradient(at 100% 100%, rgba(255, 51, 102, 0.05) 0px, transparent 50%),
+                        radial-gradient(at 0% 100%, rgba(255, 192, 203, 0.15) 0px, transparent 50%);
+            filter: blur(80px); animation: meshMove 20s infinite alternate;
+        }
+        .glass-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.4) 100%);
+            backdrop-filter: blur(30px); border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 40px; padding: 4rem; max-width: 900px; width: 92%;
+            margin: 60px auto; box-shadow: 0 40px 80px rgba(255, 51, 102, 0.1);
+            display: grid; grid-template-columns: 1.4fr 1fr; gap: 3rem; align-items: center;
+        }
+        @media (max-width: 850px) { .glass-card { grid-template-columns: 1fr; padding: 2rem; } }
+        h1 { font-family: var(--font-serif); font-size: 3.5rem; color: #2d1b24; font-weight: 700; margin-bottom: 2rem; }
+        .letter { font-size: 1.1rem; line-height: 1.8; color: #4a3a41; margin-bottom: 3rem; }
+        .metric-value { font-size: 2.2rem; font-weight: 600; color: #2d1b24; }
+        .polaroid-frame { background: #fff; padding: 15px 15px 45px 15px; transform: rotate(2deg); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .polaroid-frame img { width: 100%; }
 
+        /* Cursor */
+        #cursor-glow { width: 300px; height: 300px; background: radial-gradient(circle, rgba(255,51,102,0.06) 0%, transparent 70%); position: fixed; pointer-events: none; z-index: 2000; transform: translate(-50%,-50%); }
+        #cursor-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; position: fixed; pointer-events: none; z-index: 2001; transform: translate(-50%,-50%); box-shadow: 0 0 10px var(--accent); }
+
+        canvas#loveCanvas { position: fixed; top: 0; left: 0; z-index: -1; pointer-events: none; }
     </style>
 </head>
 <body>
 
-    <div id="overlay-start">
-        <button class="btn-play" onclick="startCinema()">Ver Cinemática</button>
+    <div id="cursor-glow"></div>
+    <div id="cursor-dot"></div>
+
+    <!-- 1. INTRO -->
+    <div id="screen-intro" class="screen" style="display: flex;">
+        <button class="btn-start" onclick="iniciarTodo()">Ver Introducción</button>
     </div>
 
-    <a href="telefono.html" class="skip-btn">Saltar</a>
-
-    <div class="top-bar cinema-bar"></div>
-    <div class="vignette"></div>
-
-    <div id="video-container">
+    <!-- 2. CINEMATICA -->
+    <div id="screen-cinematic" class="screen">
+        <div class="top-bar cinema-bar"></div>
         <video id="myVideo" playsinline>
             <source src="video.mp4" type="video/mp4">
-            Tu navegador no soporta video.
         </video>
+        <div id="subtitles"></div>
+        <div class="bottom-bar cinema-bar"></div>
     </div>
 
-    <div id="subtitles">
-        <!-- Los subtítulos se cargarán aquí dinámicamente -->
+    <!-- 3. TELEFONO -->
+    <div id="screen-phone" class="screen">
+        <div id="phone-bg"></div>
+        <div class="status-bar">
+            <div id="status-time">00:00</div>
+            <div style="display: flex; gap: 8px;"><i class="material-icons" style="font-size:1rem;">signal_cellular_alt</i><i class="material-icons" style="font-size:1rem;">wifi</i><i class="material-icons" style="font-size:1rem;">battery_full</i></div>
+        </div>
+        <div id="notif-banner" onclick="mostrarRegalo()">
+            <img src="Profile.jpg" class="notif-profile">
+            <div class="notif-content">
+                <div class="notif-user">Mi amorcito 💖</div>
+                <div class="notif-msg">¡Sorpresa! He preparado algo para ti... Toca para ver ✨</div>
+            </div>
+        </div>
+        <div class="app-grid">
+            <div class="app-icon"><div class="icon-box ig"><i class="material-icons">photo_camera</i></div><span class="app-name">Instagram</span></div>
+            <div class="app-icon"><div class="icon-box wa"><i class="material-icons">message</i></div><span class="app-name">WhatsApp</span></div>
+            <div class="app-icon"><div class="icon-box tk"><i class="material-icons">music_video</i></div><span class="app-name">TikTok</span></div>
+            <div class="app-icon"><div class="icon-box ph"><i class="material-icons">image</i></div><span class="app-name">Fotos</span></div>
+        </div>
+        <div class="dock">
+            <div class="icon-box" style="background:#4cd964;"><i class="material-icons">phone</i></div>
+            <div class="icon-box" style="background:#ff2d55;"><i class="material-icons">music_note</i></div>
+        </div>
     </div>
 
-    <div class="bottom-bar cinema-bar"></div>
+    <!-- 4. REGALO -->
+    <div id="screen-gift" class="screen">
+        <div id="bg-mesh"></div>
+        <canvas id="loveCanvas"></canvas>
+        <div class="glass-card">
+            <div class="card-content">
+                <div style="font-size:0.6rem; letter-spacing:5px; color:var(--accent); margin-bottom:1rem;">COLOMBIA — MÉXICO</div>
+                <h1>Mi Princesita</h1>
+                <div id="letter-text" class="letter"></div>
+                <div id="sig" style="font-family:var(--font-serif); font-size:1.8rem; color:var(--accent); opacity:0; transition:2s;">Feliz primer mes, Mi vida.</div>
+                <div style="display:flex; gap:2rem; margin-top:2rem; border-top:1px solid rgba(0,0,0,0.05); padding-top:2rem;">
+                    <div><div class="metric-value">31</div><div style="font-size:0.6rem; color:var(--accent);">DÍAS</div></div>
+                    <div><div class="metric-value">∞</div><div style="font-size:0.6rem; color:var(--accent);">VOZ</div></div>
+                </div>
+            </div>
+            <div class="polaroid-frame"><img src="Photo.jpg"></div>
+        </div>
+    </div>
+
+    <audio id="audio-notif"><source src="https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3"></audio>
+    <audio id="audio-bg" loop><source src="mi-persona-favorita-lyric-video.mp3"></audio>
 
     <script>
-        const subtitlesData = [
-            { text: "A veces el destino nos sorprende...", time: 2000 },
-            { text: "Cruzando fronteras y distancias...", time: 7000 },
-            { text: "Solo para encontrarte.", time: 12000 },
-            { text: "Esta es nuestra historia.", time: 17000 }
-        ];
-
-        function startCinema() {
-            const overlay = document.getElementById('overlay-start');
-            const video = document.getElementById('myVideo');
-            
-            // Solicitar pantalla completa
-            let elem = document.documentElement;
-            if (elem.requestFullscreen) {
-                elem.requestFullscreen();
-            } else if (elem.webkitRequestFullscreen) {
-                elem.webkitRequestFullscreen();
-            } else if (elem.msRequestFullscreen) {
-                elem.msRequestFullscreen();
-            }
-
-            overlay.style.opacity = '0';
-            setTimeout(() => {
-                overlay.style.display = 'none';
-                video.play();
-                showSubtitles();
-            }, 1000);
+        // --- Fullscreen ---
+        function toggleFS() {
+            let el = document.documentElement;
+            if (el.requestFullscreen) el.requestFullscreen();
+            else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
         }
 
-        function showSubtitles() {
-            const container = document.getElementById('subtitles');
-            subtitlesData.forEach(sub => {
+        // --- Navegación ---
+        function iniciarTodo() {
+            toggleFS();
+            document.getElementById('screen-intro').style.display = 'none';
+            document.getElementById('screen-cinematic').style.display = 'block';
+            const video = document.getElementById('myVideo');
+            video.play();
+            
+            // Subtítulos
+            const subs = [
+                { t: "A veces el destino nos sorprende...", d: 2000 },
+                { t: "Cruzando fronteras y distancias...", d: 7000 },
+                { t: "Solo para encontrarte.", d: 12000 }
+            ];
+            subs.forEach(s => {
                 setTimeout(() => {
                     const el = document.createElement('div');
-                    el.className = 'subtitle-text';
-                    el.innerText = sub.text;
-                    container.innerHTML = '';
-                    container.appendChild(el);
-                }, sub.time);
+                    el.className = 'subtitle-text'; el.innerText = s.t;
+                    document.getElementById('subtitles').innerHTML = '';
+                    document.getElementById('subtitles').appendChild(el);
+                }, s.d);
             });
+
+            video.onended = mostrarTelefono;
         }
 
-        // Redirigir al final del video
-        document.getElementById('myVideo').onended = function() {
-            window.location.href = "telefono.html";
-        };
+        function mostrarTelefono() {
+            document.getElementById('screen-cinematic').style.display = 'none';
+            document.getElementById('screen-phone').style.display = 'block';
+            updateTime(); setInterval(updateTime, 1000);
+            setTimeout(() => {
+                document.getElementById('notif-banner').classList.add('show');
+                document.getElementById('audio-notif').play();
+            }, 3000);
+        }
+
+        function mostrarRegalo() {
+            document.getElementById('screen-phone').style.display = 'none';
+            document.getElementById('screen-gift').style.display = 'block';
+            document.getElementById('audio-bg').play();
+            initCanvas();
+            typeWriter();
+        }
+
+        // --- Componentes ---
+        function updateTime() {
+            const n = new Date();
+            document.getElementById('status-time').innerText = `${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}`;
+        }
+
+        const texto = `Hay personas que necesitan verse todos los días para sentir algo. Nosotros demostramos que se puede construir un universo entero solo con la voz y las palabras.\n\nEn estos 30 días, cada mensaje tuyo ha sido mi notificación favorita, y cada llamada, el mejor momento de mi día. No tenemos fotos juntos todavía, pero tenemos algo más fuerte: la certeza de que la distancia es temporal.`;
+        function typeWriter() {
+            let i = 0; const el = document.getElementById('letter-text');
+            function p() {
+                if (i < texto.length) {
+                    el.innerHTML += texto.charAt(i) === '\n' ? '<br>' : texto.charAt(i);
+                    i++; setTimeout(p, 35);
+                } else { document.getElementById('sig').style.opacity = '1'; }
+            }
+            p();
+        }
+
+        // --- Canvas ---
+        const canvas = document.getElementById('loveCanvas');
+        const ctx = canvas.getContext('2d');
+        let petals = [];
+        function initCanvas() {
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+            for(let i=0; i<50; i++) petals.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, s: Math.random()*5+2, sy: Math.random()*1+1, r: Math.random()*360 });
+            loop();
+        }
+        function loop() {
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            petals.forEach(p => {
+                p.y += p.sy; p.r += 1;
+                if(p.y > canvas.height) p.y = -10;
+                ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r*Math.PI/180);
+                ctx.beginPath(); ctx.ellipse(0,0,p.s,p.s*1.5,0,0,Math.PI*2);
+                ctx.fillStyle = "rgba(255,51,102,0.3)"; ctx.fill(); ctx.restore();
+            });
+            requestAnimationFrame(loop);
+        }
+
+        // --- Cursor ---
+        const glow = document.getElementById('cursor-glow');
+        const dot = document.getElementById('cursor-dot');
+        window.addEventListener('mousemove', (e) => {
+            glow.style.left = e.clientX+'px'; glow.style.top = e.clientY+'px';
+            dot.style.left = e.clientX+'px'; dot.style.top = e.clientY+'px';
+        });
     </script>
 </body>
 </html>
