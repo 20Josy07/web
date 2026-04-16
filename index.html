@@ -211,13 +211,13 @@
     </div>
 
     <!-- PANTALLA 3: TELÉFONO -->
-    <div id="screen-phone" class="screen">
+    <div id="screen-phone" class="screen" onclick="requestFS()">
         <div id="phone-bg"></div>
         <div class="status-bar">
             <div id="status-time">00:00</div>
             <div style="display: flex; gap: 8px;"><i class="material-icons" style="font-size:1rem;">signal_cellular_alt</i><i class="material-icons" style="font-size:1rem;">wifi</i><i class="material-icons" style="font-size:1rem;">battery_full</i></div>
         </div>
-        <div id="notif-banner" onclick="abrirRegalo()">
+        <div id="notif-banner" onclick="abrirRegalo(event)">
             <img src="Profile.jpg" class="notif-profile">
             <div class="notif-content">
                 <div class="notif-user">Mi amorcito 💖</div>
@@ -312,7 +312,8 @@
             }, 3000);
         }
 
-        function abrirRegalo() {
+        function abrirRegalo(e) {
+            if(e) e.stopPropagation(); // Evitar que el clic en la notificación active el requestFS del padre
             document.getElementById('screen-phone').style.opacity = '0';
             setTimeout(() => {
                 document.getElementById('screen-phone').style.display = 'none';
