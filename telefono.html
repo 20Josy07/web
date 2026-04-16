@@ -21,7 +21,7 @@
         #phone-bg {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: url('phone_wallpaper_1776381565137.png') no-repeat center center;
+            background: url('Wallpaper.jpg') no-repeat center center;
             background-size: cover;
             filter: brightness(0.8);
             z-index: 1;
@@ -132,16 +132,31 @@
             transform: translateY(120px);
         }
 
+        .notif-profile-img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
         .notif-app-icon {
-            width: 40px;
-            height: 40px;
+            width: 18px;
+            height: 18px;
             background: #25D366;
-            border-radius: 10px;
+            border-radius: 4px;
             display: flex;
             justify-content: center;
             align-items: center;
             color: #fff;
+            position: absolute;
+            bottom: 15px;
+            left: 48px;
+            font-size: 0.6rem;
+            border: 2px solid #fff;
         }
+
+        .notif-app-icon i { font-size: 0.7rem; }
 
         .notif-content {
             flex: 1;
@@ -190,6 +205,7 @@
     <div id="phone-bg"></div>
 
     <div id="notif-banner" onclick="openGift()">
+        <img src="Profile.jpg" alt="Profile" class="notif-profile-img">
         <div class="notif-app-icon"><i class="material-icons">message</i></div>
         <div class="notif-content">
             <div class="notif-user">Mi amorcito 💖</div>
