@@ -4,60 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Un momento para nosotros ❤️</title>
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="mobile-web-app-capable" content="yes">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
         :root {
-            --bg-top: #fff5f8;
-            --bg-bottom: #fdfdfd;
-            --glass-bg: rgba(255, 255, 255, 0.6);
-            --glass-border: rgba(255, 51, 102, 0.15);
-            --text-main: #3d1a25;
             --accent: #ff3366;
-            --accent-glow: rgba(255, 51, 102, 0.1);
             --font-serif: 'Playfair Display', serif;
             --font-sans: 'Outfit', sans-serif;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: none !important; }
-        @media (pointer: coarse) { 
-            * { cursor: auto !important; } 
-            #cursor-glow, #cursor-dot { display: none !important; }
-        }
+        @media (pointer: coarse) { * { cursor: auto !important; } #cursor-glow, #cursor-dot { display: none !important; } }
 
         body, html {
             width: 100vw;
             height: 100vh;
             height: 100dvh;
-            margin: 0;
-            padding: 0;
             overflow: hidden;
             background: #000;
             font-family: var(--font-sans);
         }
 
-        /* --- Estructura de Pantallas --- */
         .screen {
             position: fixed;
             top: 0; left: 0;
             width: 100vw;
             height: 100vh;
             display: none;
-            overflow: hidden;
-            transition: opacity 1s ease;
+            z-index: 10;
         }
 
-        /* --- 1. INTRO: BOTÓN INICIAL --- */
+        /* --- 1. INTRO --- */
         #screen-intro {
             display: flex;
-            background: #000;
             z-index: 1000;
+            background: #000;
             justify-content: center;
             align-items: center;
-            flex-direction: column;
         }
 
         .btn-start {
@@ -69,80 +52,56 @@
             text-transform: uppercase;
             font-size: 0.8rem;
             cursor: pointer;
-            transition: all 0.4s;
         }
-        .btn-start:hover { background: #fff; color: #000; }
 
-        /* --- 2. CINEMÁTICA --- */
-        #screen-cinematic {
-            background: #000;
-        }
-        video#myVideo {
-            width: 100vw;
-            height: 100vh;
-            object-fit: contain;
-            background: #000;
+        /* --- 2. CINEMATICA --- */
+        #screen-cinematic { background: #000; }
+        #myVideo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         .cinema-bar {
-            position: absolute; left: 0; width: 100%; height: 12vh;
-            background: #000; z-index: 10;
+            position: absolute; left: 0; width: 100%; height: 10vh;
+            background: #000; z-index: 20;
         }
-        .top-bar { top: 0; }
-        .bottom-bar { bottom: 0; }
+        .top-bar { top: 0; } .bottom-bar { bottom: 0; }
         #subtitles {
-            position: absolute; bottom: 15vh; left: 50%;
-            transform: translateX(-50%); text-align: center;
-            z-index: 20; width: 80%;
+            position: absolute; bottom: 15vh; left: 0; width: 100%;
+            text-align: center; z-index: 30;
         }
         .subtitle-text {
-            font-family: var(--font-serif);
-            font-size: 1.8rem; color: #fff; font-style: italic;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
-            opacity: 0; animation: fadeInOut 5s forwards;
-        }
-        @keyframes fadeInOut {
-            0% { opacity: 0; transform: translateY(10px); }
-            20% { opacity: 1; transform: translateY(0); }
-            80% { opacity: 1; transform: translateY(0); }
-            100% { opacity: 0; transform: translateY(-10px); }
+            font-family: var(--font-serif); font-size: 1.5rem;
+            color: #fff; font-style: italic; opacity: 0;
+            animation: fadeInOut 5s forwards;
         }
 
-        /* --- 3. HOME DEL CELULAR --- */
-        #screen-phone {
-            background: #000;
-        }
+        /* --- 3. TELEFONO --- */
+        #screen-phone { background: #000; }
         #phone-bg {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: url('wallpaper.jpg') no-repeat center center;
-            background-size: cover;
-            filter: brightness(0.8);
-            z-index: 1; /* Capa base */
+            background-size: cover; z-index: 1;
         }
-        .status-bar, .app-grid, .dock, #notif-banner {
-            position: relative;
-            z-index: 10; /* Por encima del fondo */
+        .phone-content {
+            position: relative; z-index: 10;
+            height: 100%; display: flex; flex-direction: column;
+            padding: 50px 20px;
         }
         .status-bar {
-            position: absolute; top: 15px; width: 100%;
             display: flex; justify-content: space-between;
-            padding: 0 25px; font-size: 0.85rem; color: #fff; font-weight: 600;
+            color: #fff; font-size: 0.8rem; font-weight: 600; margin-bottom: 40px;
         }
         .app-grid {
-            flex: 1;
-            display: grid; 
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px 10px; 
-            padding: 20px;
-            align-content: start;
+            display: grid; grid-template-columns: repeat(4, 1fr);
+            gap: 25px 15px; text-align: center;
         }
-        .app-icon { display: flex; flex-direction: column; align-items: center; gap: 5px; }
         .icon-box {
-            width: 55px; height: 55px; border-radius: 14px;
+            width: 60px; height: 60px; border-radius: 14px;
             display: flex; justify-content: center; align-items: center;
-            color: #fff; font-size: 1.5rem;
-            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+            color: #fff; font-size: 1.8rem; margin-bottom: 8px;
         }
-        .app-name { color: #fff; font-size: 0.6rem; font-weight: 500; margin-top: 2px; }
+        .app-name { color: #fff; font-size: 0.65rem; }
         .ig { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
         .wa { background: #25D366; }
         .tk { background: #000; border: 1px solid rgba(255,255,255,0.2); }
@@ -158,54 +117,38 @@
             position: absolute; top: -120px; left: 15px; right: 15px;
             background: rgba(255, 255, 255, 0.95); border-radius: 24px;
             padding: 12px; display: flex; align-items: center; gap: 12px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3); z-index: 2000;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3); z-index: 100;
             transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            cursor: pointer;
         }
         #notif-banner.show { transform: translateY(140px); }
         .notif-profile { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; }
-        .notif-content { flex: 1; }
         .notif-user { font-weight: 700; font-size: 0.9rem; color: #000; }
         .notif-msg { font-size: 0.85rem; color: #444; }
 
-        /* --- 4. REGALO FINAL --- */
-        #screen-gift {
-            background: var(--bg-bottom);
-            overflow-y: auto !important;
-        }
-        #bg-mesh {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
-            background: radial-gradient(at 0% 0%, rgba(255, 51, 102, 0.1) 0px, transparent 50%),
-                        radial-gradient(at 100% 0%, rgba(255, 182, 193, 0.2) 0px, transparent 50%),
-                        radial-gradient(at 100% 100%, rgba(255, 51, 102, 0.05) 0px, transparent 50%),
-                        radial-gradient(at 0% 100%, rgba(255, 192, 203, 0.15) 0px, transparent 50%);
-            filter: blur(80px); animation: meshMove 20s infinite alternate;
-        }
+        /* --- 4. REGALO --- */
+        #screen-gift { background: #fdfdfd; overflow-y: auto !important; }
         .glass-card {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.4) 100%);
-            backdrop-filter: blur(30px); border: 1px solid rgba(255, 255, 255, 0.5);
-            border-radius: 50px; padding: 4rem; max-width: 950px; width: 92%;
-            margin: 60px auto; box-shadow: 0 40px 100px rgba(255, 51, 102, 0.1);
-            display: grid; grid-template-columns: 1.3fr 1fr; gap: 4rem; align-items: center;
+            background: rgba(255,255,255,0.7); backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,51,102,0.1); border-radius: 40px;
+            padding: 3rem; max-width: 900px; width: 92%; margin: 40px auto;
+            display: grid; grid-template-columns: 1.2fr 1fr; gap: 2rem;
         }
-        @media (max-width: 900px) { 
-            .glass-card { grid-template-columns: 1fr; padding: 2.5rem 1.5rem; gap: 3rem; border-radius: 30px; }
-            .polaroid-container { order: -1; display: flex; justify-content: center; }
-            .polaroid-frame { width: 85%; max-width: 250px; }
-        }
-        h1 { font-family: var(--font-serif); font-size: 4rem; color: #2d1b24; font-weight: 700; margin-bottom: 2rem; }
-        .letter { font-size: 1.2rem; line-height: 2.2; color: #4a3a41; margin-bottom: 3.5rem; font-family: var(--font-sans); }
-        .signature-text { font-family: var(--font-serif); font-size: 2rem; color: var(--accent); opacity: 0; transition: 2s; margin-bottom: 3rem; }
-        .metrics { display: flex; gap: 3rem; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 3rem; }
-        .metric-value { font-size: 2.8rem; font-family: var(--font-sans); color: #2d1b24; font-weight: 600; display: block; }
-        .metric-label { font-size: 0.7rem; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; }
-        .polaroid-frame { background: #fff; padding: 15px 15px 50px 15px; transform: rotate(2deg); box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
-        .polaroid-frame img { width: 100%; filter: grayscale(0.1) contrast(1.05); }
+        @media (max-width: 800px) { .glass-card { grid-template-columns: 1fr; padding: 2rem; } }
+        h1 { font-family: var(--font-serif); font-size: 3rem; margin-bottom: 1.5rem; }
+        .letter { font-size: 1.1rem; line-height: 1.8; color: #4a3a41; margin-bottom: 2rem; }
+        .polaroid-frame { background: #fff; padding: 15px 15px 45px 15px; transform: rotate(2deg); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .polaroid-frame img { width: 100%; }
 
-        /* Cursor & Canvas */
-        #cursor-glow { width: 300px; height: 300px; background: radial-gradient(circle, rgba(255,51,102,0.08) 0%, transparent 70%); position: fixed; pointer-events: none; z-index: 5000; transform: translate(-50%,-50%); }
-        #cursor-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; position: fixed; pointer-events: none; z-index: 5001; transform: translate(-50%,-50%); box-shadow: 0 0 10px var(--accent); }
-        canvas#loveCanvas { position: fixed; top: 0; left: 0; z-index: -1; pointer-events: none; }
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateY(10px); }
+            20% { opacity: 1; transform: translateY(0); }
+            80% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-10px); }
+        }
+
+        #cursor-glow { width: 300px; height: 300px; background: radial-gradient(circle, rgba(255,51,102,0.05) 0%, transparent 70%); position: fixed; pointer-events: none; z-index: 5000; transform: translate(-50%,-50%); }
+        #cursor-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; position: fixed; pointer-events: none; z-index: 5001; transform: translate(-50%,-50%); }
+        canvas { position: fixed; top: 0; left: 0; z-index: -1; pointer-events: none; }
     </style>
 </head>
 <body>
@@ -213,28 +156,19 @@
     <div id="cursor-glow"></div>
     <div id="cursor-dot"></div>
 
-    <!-- PANTALLA 1: INICIO -->
     <div id="screen-intro" class="screen" style="display: flex;">
-        <button class="btn-start" onclick="iniciarExperiencia()">Ver Introducción</button>
+        <button class="btn-start" onclick="iniciar()">Ver Introducción</button>
     </div>
 
-    <!-- PANTALLA 2: CINEMÁTICA -->
     <div id="screen-cinematic" class="screen">
         <div class="top-bar cinema-bar"></div>
-        <video id="myVideo" playsinline>
-            <source src="video.mp4" type="video/mp4">
-        </video>
+        <video id="myVideo" playsinline><source src="video.mp4" type="video/mp4"></video>
         <div id="subtitles"></div>
         <div class="bottom-bar cinema-bar"></div>
     </div>
 
-    <!-- PANTALLA 3: TELÉFONO -->
-    <div id="screen-phone" class="screen" onclick="requestFS()" style="display: flex; flex-direction: column; padding: 40px 10px 100px 10px;">
+    <div id="screen-phone" class="screen" onclick="requestFS()">
         <div id="phone-bg"></div>
-        <div class="status-bar">
-            <div id="status-time">00:00</div>
-            <div style="display: flex; gap: 8px;"><i class="material-icons" style="font-size:1rem;">signal_cellular_alt</i><i class="material-icons" style="font-size:1rem;">wifi</i><i class="material-icons" style="font-size:1rem;">battery_full</i></div>
-        </div>
         <div id="notif-banner" onclick="abrirRegalo(event)">
             <img src="Profile.jpg" class="notif-profile">
             <div class="notif-content">
@@ -242,57 +176,55 @@
                 <div class="notif-msg">¡Sorpresa! He preparado algo para ti... Toca para ver ✨</div>
             </div>
         </div>
-        <div class="app-grid">
-            <div class="app-icon"><div class="icon-box ig"><i class="material-icons">photo_camera</i></div><span class="app-name">Instagram</span></div>
-            <div class="app-icon"><div class="icon-box wa"><i class="material-icons">message</i></div><span class="app-name">WhatsApp</span></div>
-            <div class="app-icon"><div class="icon-box tk"><i class="material-icons">music_video</i></div><span class="app-name">TikTok</span></div>
-            <div class="app-icon"><div class="icon-box ph"><i class="material-icons">image</i></div><span class="app-name">Fotos</span></div>
-            <div class="app-icon"><div class="icon-box sp"><i class="material-icons">play_circle</i></div><span class="app-name">Spotify</span></div>
-            <div class="app-icon"><div class="icon-box st"><i class="material-icons">settings</i></div><span class="app-name">Ajustes</span></div>
-        </div>
-        <div class="dock">
-            <div class="icon-box" style="background:#4cd964;"><i class="material-icons">phone</i></div>
-            <div class="icon-box" style="background:#ff2d55;"><i class="material-icons">music_note</i></div>
-            <div class="icon-box" style="background:#25D366;"><i class="material-icons">chat</i></div>
+        <div class="phone-content">
+            <div class="status-bar">
+                <div id="status-time">00:00</div>
+                <div style="display:flex; gap:8px;"><i class="material-icons" style="font-size:1rem;">signal_cellular_alt</i><i class="material-icons" style="font-size:1rem;">wifi</i><i class="material-icons" style="font-size:1rem;">battery_full</i></div>
+            </div>
+            <div class="app-grid">
+                <div class="app-icon"><div class="icon-box ig"><i class="material-icons">photo_camera</i></div><span class="app-name">Instagram</span></div>
+                <div class="app-icon"><div class="icon-box wa"><i class="material-icons">message</i></div><span class="app-name">WhatsApp</span></div>
+                <div class="app-icon"><div class="icon-box tk"><i class="material-icons">music_video</i></div><span class="app-name">TikTok</span></div>
+                <div class="app-icon"><div class="icon-box ph"><i class="material-icons">image</i></div><span class="app-name">Fotos</span></div>
+                <div class="app-icon"><div class="icon-box sp"><i class="material-icons">play_circle</i></div><span class="app-name">Spotify</span></div>
+                <div class="app-icon"><div class="icon-box st"><i class="material-icons">settings</i></div><span class="app-name">Ajustes</span></div>
+            </div>
+            <div class="dock">
+                <div class="icon-box" style="background:#4cd964;"><i class="material-icons">phone</i></div>
+                <div class="icon-box" style="background:#ff2d55;"><i class="material-icons">music_note</i></div>
+                <div class="icon-box" style="background:#25D366;"><i class="material-icons">chat</i></div>
+            </div>
         </div>
     </div>
 
-    <!-- PANTALLA 4: REGALO -->
     <div id="screen-gift" class="screen">
-        <div id="bg-mesh"></div>
         <canvas id="loveCanvas"></canvas>
         <div class="glass-card">
             <div class="card-content">
-                <div style="font-size:0.7rem; letter-spacing:8px; color:var(--accent); margin-bottom:2rem; font-weight:500;">COLOMBIA — MÉXICO</div>
+                <div style="font-size:0.6rem; letter-spacing:5px; color:var(--accent); margin-bottom:1rem;">COLOMBIA — MÉXICO</div>
                 <h1>Mi Princesita</h1>
                 <div id="letter-text" class="letter"></div>
-                <div id="signature-reveal" class="signature-text">Feliz primer mes, Mi vida.</div>
-                <div class="metrics">
-                    <div class="metric-item"><span class="metric-value">31</span><span class="metric-label">Días</span></div>
-                    <div class="metric-item"><span class="metric-value">∞</span><span class="metric-label">Voz</span></div>
-                    <div class="metric-item"><span class="metric-value">1</span><span class="metric-label">Destino</span></div>
+                <div id="sig" style="font-family:var(--font-serif); font-size:1.8rem; color:var(--accent); opacity:0; transition:2s;">Feliz primer mes, Mi vida.</div>
+                <div style="display:flex; gap:2rem; margin-top:2rem; border-top:1px solid rgba(0,0,0,0.05); padding-top:2rem;">
+                    <div><div style="font-size:2rem; font-weight:600;">31</div><div style="font-size:0.6rem; color:var(--accent);">DÍAS</div></div>
+                    <div><div style="font-size:2rem; font-weight:600;">∞</div><div style="font-size:0.6rem; color:var(--accent);">VOZ</div></div>
                 </div>
             </div>
-            <div class="polaroid-container">
-                <div class="polaroid-frame"><img src="Photo.jpg" alt="Nosotros"></div>
-            </div>
+            <div class="polaroid-frame"><img src="Photo.jpg"></div>
         </div>
     </div>
 
-    <audio id="audio-notif"><source src="https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3" type="audio/mpeg"></audio>
-    <audio id="audio-bg" loop><source src="mi-persona-favorita-lyric-video.mp3" type="audio/mpeg"></audio>
+    <audio id="audio-notif"><source src="https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3"></audio>
+    <audio id="audio-bg" loop><source src="mi-persona-favorita-lyric-video.mp3"></audio>
 
     <script>
-        // --- Fullscreen ---
         function requestFS() {
             let el = document.documentElement;
             if (el.requestFullscreen) el.requestFullscreen();
             else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
-            else if (el.msRequestFullscreen) el.msRequestFullscreen();
         }
 
-        // --- Navegación ---
-        function iniciarExperiencia() {
+        function iniciar() {
             requestFS();
             document.getElementById('screen-intro').style.display = 'none';
             document.getElementById('screen-cinematic').style.display = 'block';
@@ -302,92 +234,74 @@
             const subs = [
                 { t: "A veces el destino nos sorprende...", d: 2000 },
                 { t: "Cruzando fronteras y distancias...", d: 7000 },
-                { t: "Solo para encontrarte.", d: 12000 },
-                { t: "Esta es nuestra historia.", d: 17000 }
+                { t: "Solo para encontrarte.", d: 12000 }
             ];
             subs.forEach(s => {
                 setTimeout(() => {
+                    const container = document.getElementById('subtitles');
                     const el = document.createElement('div');
                     el.className = 'subtitle-text'; el.innerText = s.t;
-                    const container = document.getElementById('subtitles');
                     container.innerHTML = ''; container.appendChild(el);
                 }, s.d);
             });
 
             video.onended = () => {
-                document.getElementById('screen-cinematic').style.opacity = '0';
-                setTimeout(irAlTelefono, 1000);
+                document.getElementById('screen-cinematic').style.display = 'none';
+                document.getElementById('screen-phone').style.display = 'block';
+                updateTime(); setInterval(updateTime, 1000);
+                setTimeout(() => {
+                    document.getElementById('notif-banner').classList.add('show');
+                    document.getElementById('audio-notif').play();
+                }, 3000);
             };
         }
 
-        function irAlTelefono() {
-            document.getElementById('screen-cinematic').style.display = 'none';
-            document.getElementById('screen-phone').style.display = 'block';
-            updateTime(); setInterval(updateTime, 1000);
-            setTimeout(() => {
-                document.getElementById('notif-banner').classList.add('show');
-                document.getElementById('audio-notif').play();
-            }, 3000);
-        }
-
         function abrirRegalo(e) {
-            if(e) e.stopPropagation(); // Evitar que el clic en la notificación active el requestFS del padre
-            document.getElementById('screen-phone').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('screen-phone').style.display = 'none';
-                document.getElementById('screen-gift').style.display = 'block';
-                document.getElementById('audio-bg').play();
-                initCanvas();
-                typeWriter();
-            }, 1000);
+            e.stopPropagation();
+            document.getElementById('screen-phone').style.display = 'none';
+            document.getElementById('screen-gift').style.display = 'block';
+            document.getElementById('audio-bg').play();
+            initCanvas();
+            typeWriter();
         }
 
-        // --- Lógica del Regalo ---
         function updateTime() {
             const n = new Date();
             document.getElementById('status-time').innerText = `${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}`;
         }
 
-        const textoCarta = `Hay personas que necesitan verse todos los días para sentir algo. Nosotros demostramos que se puede construir un universo entero solo con la voz y las palabras.\n\nEn estos 30 días, cada mensaje tuyo ha sido mi notificación favorita, y cada llamada, el mejor momento de mi día. No tenemos fotos juntos todavía, pero tenemos algo más fuerte: la certeza de que la distancia es temporal.`;
-        
+        const texto = `Hay personas que necesitan verse todos los días para sentir algo. Nosotros demostramos que se puede construir un universo entero solo con la voz y las palabras.\n\nEn estos 30 días, cada mensaje tuyo ha sido mi notificación favorita, y cada llamada, el mejor momento de mi día. No tenemos fotos juntos todavía, pero tenemos algo más fuerte: la certeza de que la distancia es temporal.`;
         function typeWriter() {
-            let i = 0; const container = document.getElementById('letter-text');
-            const sig = document.getElementById('signature-reveal');
-            function print() {
-                if (i < textoCarta.length) {
-                    container.innerHTML += textoCarta.charAt(i) === '\n' ? '<br>' : textoCarta.charAt(i);
-                    i++; setTimeout(print, 35);
-                } else { sig.style.opacity = '1'; }
+            let i = 0; const el = document.getElementById('letter-text');
+            function p() {
+                if (i < texto.length) {
+                    el.innerHTML += texto.charAt(i) === '\n' ? '<br>' : texto.charAt(i);
+                    i++; setTimeout(p, 35);
+                } else { document.getElementById('sig').style.opacity = '1'; }
             }
-            print();
+            p();
         }
 
-        // --- Canvas Pétalos ---
-        const canvas = document.getElementById('loveCanvas');
+        const canvas = document.querySelector('canvas');
         const ctx = canvas.getContext('2d');
         let petals = [];
         function initCanvas() {
             canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-            for(let i=0; i<50; i++) petals.push({
-                x: Math.random()*canvas.width, y: Math.random()*canvas.height,
-                s: Math.random()*5+2, sy: Math.random()*1+1, r: Math.random()*360,
-                rs: Math.random()*2, o: Math.random()*0.5+0.2
-            });
+            for(let i=0; i<50; i++) petals.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, s: Math.random()*5+2, sy: Math.random()*1+1, r: Math.random()*360 });
             loop();
         }
         function loop() {
             ctx.clearRect(0,0,canvas.width,canvas.height);
             petals.forEach(p => {
-                p.y += p.sy; p.r += p.rs;
-                if(p.y > canvas.height) { p.y = -20; p.x = Math.random()*canvas.width; }
+                p.y += p.sy; p.r += 1;
+                if(p.y > canvas.height) p.y = -10;
                 ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r*Math.PI/180);
                 ctx.beginPath(); ctx.ellipse(0,0,p.s,p.s*1.5,0,0,Math.PI*2);
-                ctx.fillStyle = `rgba(255, 51, 102, ${p.o})`; ctx.fill(); ctx.restore();
+                ctx.fillStyle = "rgba(255,51,102,0.3)"; ctx.fill(); ctx.restore();
             });
             requestAnimationFrame(loop);
         }
 
-        // --- Cursor ---
         const glow = document.getElementById('cursor-glow');
         const dot = document.getElementById('cursor-dot');
         window.addEventListener('mousemove', (e) => {
