@@ -467,23 +467,8 @@
             const video = document.getElementById('myVideo');
             video.play();
 
-            let yaCambio = false;
-            video.ontimeupdate = () => {
-                // Cortar exactamente 2 segundos antes del final
-                const tiempoCorte = Math.max(0, video.duration - 2);
-                if (!yaCambio && video.currentTime >= tiempoCorte) {
-                    yaCambio = true;
-                    video.pause();
-                    mostrarTelefono();
-                }
-            };
-
-            // Respaldo por si falla el ontimeupdate
             video.onended = () => {
-                if (!yaCambio) {
-                    yaCambio = true;
-                    mostrarTelefono();
-                }
+                mostrarTelefono();
             };
         }
 
