@@ -402,8 +402,8 @@
                     <div class="icon-box ph"><i class="material-icons">image</i></div><span
                         class="app-name">Fotos</span>
                 </div>
-                <div class="app-icon">
-                    <div class="icon-box sp"><i class="material-icons">play_circle</i></div><span
+                <div class="app-icon" onclick="playMusicAndContinue(event)">
+                    <div class="icon-box sp" style="cursor: pointer;"><i class="material-icons">play_circle</i></div><span
                         class="app-name">Spotify</span>
                 </div>
                 <div class="app-icon">
@@ -434,7 +434,7 @@
                     style="font-family:var(--font-serif); font-size:1.8rem; color:var(--accent); opacity:0; transition:2s;">
                     Feliz primer mes, Mi vida.</div>
                 <div
-                    style="display:flex; gap:2rem; margin-top:2rem; border-top:1px solid rgba(0,0,0,0.05); padding-top:2rem;">
+                    style="display:flex; gap:2rem; margin-top:2rem; border-top:1px solid rgba(0,0,0,0.05); padding-top:2rem; flex-wrap: wrap;">
                     <div>
                         <div style="font-size:2rem; font-weight:600;">31</div>
                         <div style="font-size:0.6rem; color:var(--accent);">DÍAS</div>
@@ -443,9 +443,15 @@
                         <div style="font-size:2rem; font-weight:600;">∞</div>
                         <div style="font-size:0.6rem; color:var(--accent);">VOZ</div>
                     </div>
+                    <div>
+                        <div style="font-size:2rem; font-weight:600;">1</div>
+                        <div style="font-size:0.6rem; color:var(--accent);">DESTINO</div>
+                    </div>
                 </div>
             </div>
-            <div class="polaroid-frame"><img src="Photo.jpg"></div>
+            <div class="polaroid-container" style="display: flex; justify-content: center; align-items: center;">
+                <div class="polaroid-frame"><img src="Photo.jpg" style="max-width: 100%; height: auto;"></div>
+            </div>
         </div>
     </div>
 
@@ -475,6 +481,7 @@
             };
         }
 
+        let notifStep = 0;
         function mostrarTelefono() {
             document.getElementById('screen-cinematic').style.display = 'none';
             document.getElementById('screen-phone').style.display = 'block';
@@ -484,33 +491,68 @@
             const msgEl = document.getElementById('notif-text-msg');
             const sound = document.getElementById('audio-notif');
 
-            const mensajes = [
-                "¿Estás ahí? ❤️",
-                "No puedo dejar de pensar en estos 30 días...",
-                "¡Sorpresa! He preparado algo para ti... Toca para ver ✨"
-            ];
+            // 1. Mensaje inicial
+            setTimeout(() => {
+                msgEl.innerText = "¿Estás ahí? ❤️";
+                banner.classList.add('show');
+                sound.currentTime = 0; sound.play();
 
-            mensajes.forEach((msg, i) => {
+                // 2. Instrucción de música
                 setTimeout(() => {
-                    msgEl.innerText = msg;
-                    banner.classList.add('show');
-                    sound.currentTime = 0;
-                    sound.play();
-
-                    // Pequeña animación para indicar nuevo mensaje en el mismo banner
+                    msgEl.innerText = "Reproduce música porfa 🎵";
                     banner.style.transform = 'translateY(130px)';
                     setTimeout(() => { banner.style.transform = ''; }, 150);
-                }, 3000 + (i * 3000)); // LLegan cada 3 segundos
-            });
+                    sound.currentTime = 0; sound.play();
+                    notifStep = 1; // Listo para que toque Spotify
+                }, 3500);
+            }, 3000);
+        }
+
+        function playMusicAndContinue(e) {
+            e.stopPropagation();
+            if (notifStep === 1) {
+                // Reproducir la canción de fondo
+                document.getElementById('audio-bg').play();
+                notifStep = 2; // Música sonando, listo para el regalo
+                
+                const banner = document.getElementById('notif-banner');
+                const msgEl = document.getElementById('notif-text-msg');
+                const sound = document.getElementById('audio-notif');
+                
+                // Animación para indicar que se tocó Spotify
+                e.currentTarget.style.transform = 'scale(0.9)';
+                setTimeout(() => { e.currentTarget.style.transform = 'scale(1)'; }, 200);
+
+                // 3. Enviar la notificación final sorpresa DESPUÉS de que suene la música
+                setTimeout(() => {
+                    msgEl.innerText = "¡Sorpresa! He preparado algo para ti... Toca para ver ✨";
+                    banner.style.transform = 'translateY(130px)';
+                    setTimeout(() => { banner.style.transform = ''; }, 150);
+                    sound.currentTime = 0; sound.play();
+                }, 2000);
+            }
         }
 
         function abrirRegalo(e) {
             e.stopPropagation();
+            if (notifStep !== 2) return; // Obligar a poner la música primero
+            
             document.getElementById('screen-phone').style.display = 'none';
             document.getElementById('screen-gift').style.display = 'block';
-            document.getElementById('audio-bg').play();
             initCanvas();
             typeWriter();
+        }
+
+        function toggleMusic() {
+            const audio = document.getElementById('audio-bg');
+            const icon = document.getElementById('music-icon');
+            if(audio.paused) {
+                audio.play();
+                icon.innerText = 'pause';
+            } else {
+                audio.pause();
+                icon.innerText = 'play_arrow';
+            }
         }
 
         function updateTime() {
