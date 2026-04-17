@@ -67,15 +67,6 @@
             background: #000; z-index: 20;
         }
         .top-bar { top: 0; } .bottom-bar { bottom: 0; }
-        #subtitles {
-            position: absolute; bottom: 15vh; left: 0; width: 100%;
-            text-align: center; z-index: 30;
-        }
-        .subtitle-text {
-            font-family: var(--font-serif); font-size: 1.5rem;
-            color: #fff; font-style: italic; opacity: 0;
-            animation: fadeInOut 5s forwards;
-        }
 
         /* --- 3. TELEFONO --- */
         #screen-phone { background: #000; }
@@ -168,7 +159,6 @@
     <div id="screen-cinematic" class="screen">
         <div class="top-bar cinema-bar"></div>
         <video id="myVideo" playsinline><source src="video.mp4" type="video/mp4"></video>
-        <div id="subtitles"></div>
         <div class="bottom-bar cinema-bar"></div>
     </div>
 
@@ -178,7 +168,7 @@
             <img src="Profile.jpg" class="notif-profile">
             <div class="notif-content">
                 <div class="notif-user">Mi amorcito 💖</div>
-                <div class="notif-msg">¡Sorpresa! He preparado algo para ti... Toca para ver ✨</div>
+                <div id="notif-text-msg" class="notif-msg">Nuevo mensaje...</div>
             </div>
         </div>
         <div class="phone-content">
@@ -236,24 +226,10 @@
             const video = document.getElementById('myVideo');
             video.play();
             
-            const subs = [
-                { t: "A veces el destino nos sorprende...", d: 2000 },
-                { t: "Cruzando fronteras y distancias...", d: 7000 },
-                { t: "Solo para encontrarte.", d: 12000 }
-            ];
-            subs.forEach(s => {
-                setTimeout(() => {
-                    const container = document.getElementById('subtitles');
-                    const el = document.createElement('div');
-                    el.className = 'subtitle-text'; el.innerText = s.t;
-                    container.innerHTML = ''; container.appendChild(el);
-                }, s.d);
-            });
-
             let yaCambio = false;
             video.ontimeupdate = () => {
-                // Cortar 35 segundos antes del final
-                if (!yaCambio && video.currentTime >= video.duration - 35) {
+                // Cortar 85 segundos (35 originales + 50) antes del final
+                if (!yaCambio && video.currentTime >= video.duration - 85) {
                     yaCambio = true;
                     video.pause();
                     mostrarTelefono();
@@ -273,10 +249,29 @@
             document.getElementById('screen-cinematic').style.display = 'none';
             document.getElementById('screen-phone').style.display = 'block';
             updateTime(); setInterval(updateTime, 1000);
-            setTimeout(() => {
-                document.getElementById('notif-banner').classList.add('show');
-                document.getElementById('audio-notif').play();
-            }, 3000);
+            
+            const banner = document.getElementById('notif-banner');
+            const msgEl = document.getElementById('notif-text-msg');
+            const sound = document.getElementById('audio-notif');
+
+            const mensajes = [
+                "¿Estás ahí? ❤️",
+                "No puedo dejar de pensar en estos 30 días...",
+                "¡Sorpresa! He preparado algo para ti... Toca para ver ✨"
+            ];
+
+            mensajes.forEach((msg, i) => {
+                setTimeout(() => {
+                    msgEl.innerText = msg;
+                    banner.classList.add('show');
+                    sound.currentTime = 0;
+                    sound.play();
+                    
+                    // Pequeña animación para indicar nuevo mensaje en el mismo banner
+                    banner.style.transform = 'translateY(130px)';
+                    setTimeout(() => { banner.style.transform = ''; }, 150);
+                }, 3000 + (i * 3000)); // LLegan cada 3 segundos
+            });
         }
 
         function abrirRegalo(e) {
