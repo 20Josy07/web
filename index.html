@@ -98,11 +98,12 @@
             gap: 20px 10px; text-align: center;
         }
         .icon-box {
-            width: 55px; height: 55px; border-radius: 14px;
+            width: 58px; height: 58px; border-radius: 18px; /* Más redondeado tipo iOS */
             display: flex; justify-content: center; align-items: center;
-            color: #fff; font-size: 1.6rem; margin-bottom: 6px;
+            color: #fff; font-size: 1.8rem; margin-bottom: 6px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15); /* Sombra suave */
         }
-        .app-name { color: #fff; font-size: 0.6rem; }
+        .app-name { color: #fff; font-size: 0.65rem; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
         .ig { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
         .wa { background: #25D366; }
         .tk { background: #000; border: 1px solid rgba(255,255,255,0.2); }
@@ -110,16 +111,19 @@
         .sp { background: #1DB954; }
         .st { background: #8e8e93; }
         .dock {
-            position: absolute; bottom: 30px; left: 20px; right: 20px;
-            background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(20px);
-            border-radius: 30px; padding: 15px; display: flex; justify-content: space-around;
+            position: absolute; bottom: 25px; left: 15px; right: 15px;
+            background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 35px; padding: 15px; display: flex; justify-content: space-around;
         }
         #notif-banner {
             position: absolute; top: -120px; left: 15px; right: 15px;
-            background: rgba(255, 255, 255, 0.95); border-radius: 24px;
-            padding: 12px; display: flex; align-items: center; gap: 12px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3); z-index: 100;
+            background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px); border-radius: 20px;
+            padding: 12px 15px; display: flex; align-items: center; gap: 15px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2); z-index: 100;
             transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(255,255,255,0.5);
         }
         #notif-banner.show { transform: translateY(140px); }
         .notif-profile { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; }
@@ -246,15 +250,33 @@
                 }, s.d);
             });
 
-            video.onended = () => {
-                document.getElementById('screen-cinematic').style.display = 'none';
-                document.getElementById('screen-phone').style.display = 'block';
-                updateTime(); setInterval(updateTime, 1000);
-                setTimeout(() => {
-                    document.getElementById('notif-banner').classList.add('show');
-                    document.getElementById('audio-notif').play();
-                }, 3000);
+            let yaCambio = false;
+            video.ontimeupdate = () => {
+                // Cortar 35 segundos antes del final
+                if (!yaCambio && video.currentTime >= video.duration - 35) {
+                    yaCambio = true;
+                    video.pause();
+                    mostrarTelefono();
+                }
             };
+            
+            // Respaldo por si falla el ontimeupdate
+            video.onended = () => {
+                if (!yaCambio) {
+                    yaCambio = true;
+                    mostrarTelefono();
+                }
+            };
+        }
+
+        function mostrarTelefono() {
+            document.getElementById('screen-cinematic').style.display = 'none';
+            document.getElementById('screen-phone').style.display = 'block';
+            updateTime(); setInterval(updateTime, 1000);
+            setTimeout(() => {
+                document.getElementById('notif-banner').classList.add('show');
+                document.getElementById('audio-notif').play();
+            }, 3000);
         }
 
         function abrirRegalo(e) {
