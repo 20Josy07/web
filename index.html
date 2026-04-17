@@ -469,8 +469,9 @@
 
             let yaCambio = false;
             video.ontimeupdate = () => {
-                // Cortar 85 segundos (35 originales + 50) antes del final
-                if (!yaCambio && video.currentTime >= video.duration - 85) {
+                // Cortar exactamente 2 segundos antes del final
+                const tiempoCorte = Math.max(0, video.duration - 2);
+                if (!yaCambio && video.currentTime >= tiempoCorte) {
                     yaCambio = true;
                     video.pause();
                     mostrarTelefono();
