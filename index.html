@@ -403,8 +403,8 @@
                         class="app-name">Fotos</span>
                 </div>
                 <div class="app-icon" onclick="playMusicAndContinue(event)">
-                    <div class="icon-box sp" style="cursor: pointer;"><i class="material-icons">music_note</i></div><span
-                        class="app-name">Spotify</span>
+                    <div class="icon-box sp" style="cursor: pointer;"><i class="material-icons">music_note</i></div>
+                    <span class="app-name">Spotify</span>
                 </div>
                 <div class="app-icon">
                     <div class="icon-box st"><i class="material-icons">settings</i></div><span
@@ -420,7 +420,8 @@
     </div>
 
     <div id="screen-gift" class="screen">
-        <button id="btn-music" onclick="toggleMusic()" style="position: absolute; top: 25px; right: 25px; z-index: 1000; background: rgba(255,255,255,0.6); border: 1px solid rgba(255,51,102,0.2); border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); cursor: pointer; color: var(--accent); box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+        <button id="btn-music" onclick="toggleMusic()"
+            style="position: absolute; top: 25px; right: 25px; z-index: 1000; background: rgba(255,255,255,0.6); border: 1px solid rgba(255,51,102,0.2); border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); cursor: pointer; color: var(--accent); box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
             <i class="material-icons" id="music-icon">pause</i>
         </button>
         <canvas id="loveCanvas"></canvas>
@@ -514,11 +515,11 @@
                 // Reproducir la canción de fondo
                 document.getElementById('audio-bg').play();
                 notifStep = 2; // Música sonando, listo para el regalo
-                
+
                 const banner = document.getElementById('notif-banner');
                 const msgEl = document.getElementById('notif-text-msg');
                 const sound = document.getElementById('audio-notif');
-                
+
                 // Animación para indicar que se tocó Spotify
                 e.currentTarget.style.transform = 'scale(0.9)';
                 setTimeout(() => { e.currentTarget.style.transform = 'scale(1)'; }, 200);
@@ -536,7 +537,7 @@
         function abrirRegalo(e) {
             e.stopPropagation();
             if (notifStep !== 2) return; // Obligar a poner la música primero
-            
+
             document.getElementById('screen-phone').style.display = 'none';
             document.getElementById('screen-gift').style.display = 'block';
             initCanvas();
@@ -546,7 +547,7 @@
         function toggleMusic() {
             const audio = document.getElementById('audio-bg');
             const icon = document.getElementById('music-icon');
-            if(audio.paused) {
+            if (audio.paused) {
                 audio.play();
                 icon.innerText = 'pause';
             } else {
@@ -560,7 +561,7 @@
             document.getElementById('status-time').innerText = `${String(n.getHours()).padStart(2, '0')}:${String(n.getMinutes()).padStart(2, '0')}`;
         }
 
-        const texto = `Hay personas que necesitan verse todos los días para sentir algo. Nosotros demostramos que se puede construir un universo entero solo con la voz y las palabras.\n\nEn estos 30 días, cada mensaje tuyo ha sido mi notificación favorita, y cada llamada, el mejor momento de mi día. No tenemos fotos juntos todavía, pero tenemos algo más fuerte: la certeza de que la distancia es temporal.`;
+        const texto = `Hay personas que necesitan verse todos los días para sentir algo. Nosotros demostramos que se puede construir un universo entero solo con la voz y las palabras.\n\nEn estos 31 días, cada mensaje tuyo ha sido mi notificación favorita, y cada llamada, el mejor momento de mi día. No tenemos fotos juntos todavía, pero tenemos algo más fuerte: la certeza de que la distancia es temporal.`;
         function typeWriter() {
             let i = 0; const el = document.getElementById('letter-text');
             function p() {
